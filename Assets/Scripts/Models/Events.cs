@@ -7,6 +7,8 @@ namespace RPSLS.Core
     public static class Events
     {
         public static Action<ElementType> SelectedElement;
+        public static Action StartGame;
+        public static Action EndGame;
     }
 }
 

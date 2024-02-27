@@ -9,7 +9,7 @@ namespace RPSLS.UI
 {
     public class TimerView : MonoBehaviour
     {
-        private float totalTime = 2f;
+        private float totalTime = 5f;
         [SerializeField] private Image radialFillImage;
         [SerializeField] private TMP_Text timerText;
         private float currentTime;
@@ -23,7 +23,7 @@ namespace RPSLS.UI
         {
             switch (gameController.currentState)
             {
-                case GameState.CalculateComputerChoice:
+                case GameState.RoundOver:
                     currentTime = totalTime;
                     break;
                 case GameState.WaitForPlayerInput:

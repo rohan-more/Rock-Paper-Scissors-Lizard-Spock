@@ -35,15 +35,6 @@ namespace RPSLS.Controllers
             return (ElementType)randomNumber;
         }
 
-        /// <summary>
-        /// Adding delay to let player prepare
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator AddDelay(float seconds)
-        {
-            yield return new WaitForSeconds(seconds);
-        }
-
         public string GetMatchResult(ElementType player, ElementType opponent)
         {
             Debug.Log("Player is: " + player + " Opponent is " + opponent);
@@ -56,6 +47,7 @@ namespace RPSLS.Controllers
                     return "Player Won!";
                 case 1:
                     ScoreController.ResetScore();
+                    Events.EndGame?.Invoke();
                     return "Computer Won!";
                 default:
                     return "Match Draw!";
@@ -65,6 +57,7 @@ namespace RPSLS.Controllers
         public string OnTimeOver()
         {
             ScoreController.ResetScore();
+            Events.EndGame?.Invoke();
             return "Time Over!";
         }
 
