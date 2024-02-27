@@ -4,6 +4,7 @@ using UnityEngine;
 using RPSLS.Core;
 using System.Linq;
 using System;
+using Unity.VisualScripting;
 
 namespace RPSLS.Controllers
 {
@@ -38,9 +39,9 @@ namespace RPSLS.Controllers
         /// Adding delay to let player prepare
         /// </summary>
         /// <returns></returns>
-        public IEnumerator AddDelay()
+        public IEnumerator AddDelay(float seconds)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(seconds);
         }
 
         public string GetMatchResult(ElementType player, ElementType opponent)

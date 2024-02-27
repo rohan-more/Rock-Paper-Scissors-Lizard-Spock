@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace RPSLS.Views
+namespace RPSLS.UI
 {
     public class UIController : MonoBehaviour
     {
