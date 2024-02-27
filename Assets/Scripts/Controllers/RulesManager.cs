@@ -12,7 +12,7 @@ namespace RPSLS.Controllers
 
         public RulesManager() { }
 
-        private static List<Rule> RuleSet = new List<Rule>
+        private static readonly List<Rule> RuleSet = new List<Rule>
         {
             new(Core.ElementType.Rock, Core.ElementType.Scissors),
             new (Core.ElementType.Rock,  Core.ElementType.Lizard),
@@ -34,6 +34,15 @@ namespace RPSLS.Controllers
             return (ElementType)randomNumber;
         }
 
+        /// <summary>
+        /// Adding delay to let player prepare
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator AddDelay()
+        {
+            yield return new WaitForSeconds(1f);
+        }
+
         public string GetMatchResult(ElementType player, ElementType opponent)
         {
             Debug.Log("Player is: " + player + " Opponent is " + opponent);
@@ -42,12 +51,20 @@ namespace RPSLS.Controllers
             switch (result)
             {
                 case 0:
+                    ScoreController.IncreaseScore();
                     return "Player Won!";
                 case 1:
+                    ScoreController.ResetScore();
                     return "Computer Won!";
                 default:
                     return "Match Draw!";
             }
+        }
+
+        public string OnTimeOver()
+        {
+            ScoreController.ResetScore();
+            return "Time Over!";
         }
 
 
