@@ -16,14 +16,15 @@ namespace RPSLS.Controllers
         private ElementType playerChoice;
         private ElementType computerChoice;
         public GameState currentState;
-        private bool hasPlayerChosen;
+        private bool hasPlayerChosen, hasComputerChosen;
         [SerializeField] private UIController uiController;
-
+        public RulesetObject ruleSet;
         void Start()
         {
             currentState = GameState.RoundOver;
             computer = new ComputerPlayer();
             uiController.ToggleComputerPlayedTextVisibility(false);
+            rulesManager.CreateDynamicRuleSet(ruleSet);
         }
 
         private void OnEnable()
@@ -58,6 +59,12 @@ namespace RPSLS.Controllers
             currentState = GameState.StartRound;
         }
 
+        public IEnumerator ShuffleElements(float seconds) // I usually used Cysharp.Unitask for such delays but for some reason it isnt importing correctly in my project
+        {
+            yield return new WaitForSeconds(seconds);
+            currentState = GameState.WaitForPlayerInput;
+        }
+
 
         private void SetSelectedElement(ElementType element)
         {
@@ -75,6 +82,7 @@ namespace RPSLS.Controllers
             uiController.UpdateHighScoreText(ScoreController.HighScore.ToString());
             uiController.ToggleResultsTextVisibility(false);
             currentState = GameState.CalculateComputerChoice;
+            StartCoroutine(ShuffleElements(1.5f));
         } 
 
         private void DeclareResults()
@@ -106,8 +114,7 @@ namespace RPSLS.Controllers
             uiController.ToggleResultsTextVisibility(true);
         }
 
-
-        void Update()
+        private void UpdateGameState()
         {
             switch (currentState)
             {
@@ -115,7 +122,7 @@ namespace RPSLS.Controllers
                     StartRound();
                     break;
                 case GameState.WaitForPlayerInput:
-                    if(hasPlayerChosen)
+                    if (hasPlayerChosen)
                     {
                         currentState = GameState.DeclareResults;
                     }
@@ -123,7 +130,6 @@ namespace RPSLS.Controllers
                 case GameState.CalculateComputerChoice:
                     computerChoice = computer.GetRandomMove();
                     uiController.UpdateComputerChoiceText(computerChoice.ToString().ToUpper());
-                    currentState = GameState.WaitForPlayerInput;
                     uiController.ToggleComputerPlayedTextVisibility(true);
                     break;
                 case GameState.TimeOver:
@@ -134,6 +140,12 @@ namespace RPSLS.Controllers
                     DeclareResults();
                     break;
             }
+        }
+
+
+        void Update()
+        {
+            UpdateGameState();
         }
 
     }

@@ -3682,6 +3682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   uiController: {fileID: 2120970120}
+  ruleSet: {fileID: 11400000, guid: 506d927554ea0484abdc45d2233f2d49, type: 2}
 --- !u!4 &1497362068
 Transform:
   m_ObjectHideFlags: 0

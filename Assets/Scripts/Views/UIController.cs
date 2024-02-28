@@ -45,7 +45,6 @@ namespace RPSLS.UI
             exitBtn.onClick.RemoveListener(ExitToMainMenu);
             Events.EndGame -= EndGame;
         }
-
         private void ExitToMainMenu()
         {
             OnBackClicked();

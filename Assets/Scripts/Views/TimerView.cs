@@ -10,15 +10,11 @@ namespace RPSLS.UI
 {
     public class TimerView : MonoBehaviour
     {
-        private float totalTime = 25f;
+        private float totalTime = 2f;
         [SerializeField] private Image radialFillImage;
         [SerializeField] private TMP_Text timerText;
         private float currentTime;
         public GameController gameController;
-        void Start()
-        {
-            //currentTime = totalTime;
-        }
 
         private void OnEnable()
         {
@@ -27,7 +23,7 @@ namespace RPSLS.UI
             timerText.text = string.Format(Constants.DECIMAL_ONE, currentTime);
         }
 
-        void Update()
+        private void UpdateTimer()
         {
             switch (gameController.currentState)
             {
@@ -46,6 +42,11 @@ namespace RPSLS.UI
                     }
                     break;
             }
+        }
+
+        void Update()
+        {
+            UpdateTimer();
         }
     }
 }

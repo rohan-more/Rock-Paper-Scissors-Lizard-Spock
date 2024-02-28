@@ -17,6 +17,7 @@ namespace RPSLS.Controllers
         private WinState currentState;
         public RulesManager() { }
 
+        // Can have a static list or a dynamic list that can be updated from RuleSet scriptable object
         private static readonly List<Rule> RuleSet = new List<Rule>
         {
             new(Core.ElementType.Rock, Core.ElementType.Scissors),
@@ -31,7 +32,19 @@ namespace RPSLS.Controllers
             new (Core.ElementType.Scissors,  Core.ElementType.Lizard)
          };
 
+
+        private static List<Rule> DynamicRuleSet = new List<Rule>{};
+
         public WinState CurrentState { get => currentState; set => currentState = value; }
+
+
+        public void CreateDynamicRuleSet(RulesetObject ruleSetData)
+        {
+            for (int i = 0; i < ruleSetData.Winners.Count; i++)
+            {
+                DynamicRuleSet.Add(new Rule(ruleSetData.Winners[i], ruleSetData.Losers[i]));
+            }
+        }
 
         public ElementType GetRandomElement()
         {
@@ -68,10 +81,10 @@ namespace RPSLS.Controllers
 
         public int Compare(Core.ElementType x, Core.ElementType y)
         {
-            Rule value = RuleSet.FirstOrDefault(i => i.Winner == x && i.Loser == y);
+            Rule value = DynamicRuleSet.FirstOrDefault(i => i.Winner == x && i.Loser == y);
             if (value == null)
             {
-                value = RuleSet.FirstOrDefault(i => i.Winner == y && i.Loser == x);
+                value = DynamicRuleSet.FirstOrDefault(i => i.Winner == y && i.Loser == x);
             }
             if (value == null)
             {
