@@ -22,12 +22,10 @@ namespace RPSLS.Controllers
             new(Core.ElementType.Rock, Core.ElementType.Scissors),
             new (Core.ElementType.Rock,  Core.ElementType.Lizard),
             new(Core.ElementType.Spock, Core.ElementType.Rock),
-            new(Core.ElementType.Spock, Core.ElementType.Rock),
             new (Core.ElementType.Spock, Core.ElementType.Scissors),
             new (Core.ElementType.Lizard,  Core.ElementType.Paper),
             new (Core.ElementType.Lizard, Core.ElementType.Spock),
             new (Core.ElementType.Paper, Core.ElementType.Spock),
-            new (Core.ElementType.Paper,  Core.ElementType.Rock),
             new (Core.ElementType.Paper,  Core.ElementType.Rock),
             new (Core.ElementType.Scissors, Core.ElementType.Paper),
             new (Core.ElementType.Scissors,  Core.ElementType.Lizard)

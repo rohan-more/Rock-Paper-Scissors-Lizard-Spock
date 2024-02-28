@@ -23,6 +23,7 @@ namespace RPSLS.Controllers
         {
             currentState = GameState.RoundOver;
             computer = new ComputerPlayer();
+            uiController.ToggleComputerPlayedTextVisibility(false);
         }
 
         private void OnEnable()
@@ -30,6 +31,7 @@ namespace RPSLS.Controllers
             Events.SelectedElement += SetSelectedElement;
             Events.StartGame += StartGame;
             Events.EndGame += EndGame;
+    
         }
 
         private void OnDisable()
@@ -46,6 +48,7 @@ namespace RPSLS.Controllers
 
         private void StartGame()
         {
+            ScoreController.ResetScore();
            StartCoroutine(AddDelay(2f));
         }
 
@@ -65,6 +68,7 @@ namespace RPSLS.Controllers
         private void StartRound()
         {
             currentState = GameState.StartRound;
+            uiController.ToggleComputerPlayedTextVisibility(false);
             playerChoice = ElementType.Rock; 
             computerChoice = ElementType.Rock;
             uiController.UpdateComputerChoiceText(string.Empty);
@@ -105,34 +109,29 @@ namespace RPSLS.Controllers
 
         void Update()
         {
-            Debug.Log(currentState.ToString());
             switch (currentState)
             {
                 case GameState.StartRound:
                     StartRound();
-                    Debug.Log(currentState.ToString());
                     break;
                 case GameState.WaitForPlayerInput:
                     if(hasPlayerChosen)
                     {
                         currentState = GameState.DeclareResults;
                     }
-                    Debug.Log(currentState.ToString());
                     break;
                 case GameState.CalculateComputerChoice:
                     computerChoice = computer.GetRandomMove();
                     uiController.UpdateComputerChoiceText(computerChoice.ToString().ToUpper());
                     currentState = GameState.WaitForPlayerInput;
-                    Debug.Log(currentState.ToString());
+                    uiController.ToggleComputerPlayedTextVisibility(true);
                     break;
                 case GameState.TimeOver:
                     TimeOver();
-                    Debug.Log(currentState.ToString());
                     break;
                 case GameState.DeclareResults:
                     hasPlayerChosen = false;
                     DeclareResults();
-                    Debug.Log(currentState.ToString());
                     break;
             }
         }

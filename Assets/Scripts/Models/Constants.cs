@@ -12,6 +12,7 @@ namespace RPSLS.Core
         public const string TIME_OVER = "Time Over!";
         public const string SCORE = "Score: ";
         public const string HIGH_SCORE = "High Score: ";
+        public const string DECIMAL_ONE = "{0:F1}";
     }
 }
 
