@@ -32,7 +32,7 @@ namespace RPSLS.Controllers
             new (Core.ElementType.Scissors,  Core.ElementType.Lizard)
          };
 
-
+        // Use the RuleSet scriptable object to add or update rules
         private static List<Rule> DynamicRuleSet = new List<Rule>{};
 
         public WinState CurrentState { get => currentState; set => currentState = value; }

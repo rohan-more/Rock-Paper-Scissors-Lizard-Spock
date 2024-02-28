@@ -19,6 +19,9 @@ namespace RPSLS.Controllers
         private bool hasPlayerChosen, hasComputerChosen;
         [SerializeField] private UIController uiController;
         public RulesetObject ruleSet;
+
+        private float shuffleTime = 1.5f;
+        private float startGameDelay = 2f;
         void Start()
         {
             currentState = GameState.RoundOver;
@@ -50,16 +53,16 @@ namespace RPSLS.Controllers
         private void StartGame()
         {
             ScoreController.ResetScore();
-           StartCoroutine(AddDelay(2f));
+           StartCoroutine(AddDelay(startGameDelay));
         }
 
-        public IEnumerator AddDelay(float seconds) // I usually used Cysharp.Unitask for such delays but for some reason it isnt importing correctly in my project
+        public IEnumerator AddDelay(float seconds) // I usually used Cysharp.Unitask for such tasks
         {
             yield return new WaitForSeconds(seconds);
             currentState = GameState.StartRound;
         }
 
-        public IEnumerator ShuffleElements(float seconds) // I usually used Cysharp.Unitask for such delays but for some reason it isnt importing correctly in my project
+        public IEnumerator ShuffleElements(float seconds)
         {
             yield return new WaitForSeconds(seconds);
             currentState = GameState.WaitForPlayerInput;
@@ -68,6 +71,10 @@ namespace RPSLS.Controllers
 
         private void SetSelectedElement(ElementType element)
         {
+            if (element == ElementType.Random)
+            {
+                element = rulesManager.GetRandomElement();
+            }
             playerChoice = element;
             hasPlayerChosen = true;
         }
@@ -82,28 +89,21 @@ namespace RPSLS.Controllers
             uiController.UpdateHighScoreText(ScoreController.HighScore.ToString());
             uiController.ToggleResultsTextVisibility(false);
             currentState = GameState.CalculateComputerChoice;
-            StartCoroutine(ShuffleElements(1.5f));
+            StartCoroutine(ShuffleElements(shuffleTime));
         } 
 
         private void DeclareResults()
         {
             string result = rulesManager.GetMatchResult(playerChoice, computerChoice);
 
-            if(rulesManager.CurrentState == WinState.ComputerWon)
-            {
-                currentState = GameState.GameOver;
-            }
-            else
-            {
-                currentState = GameState.RoundOver;
-            }
+            currentState = rulesManager.CurrentState == WinState.ComputerWon ? GameState.GameOver : GameState.RoundOver;
             uiController.UpdateResultsText(result);
             uiController.ToggleResultsTextVisibility(true);
             uiController.UpdateScoreText();
             uiController.UpdateHighScoreText(SaveDataManager.GetKey(Constants.HIGH_SCORE_KEY).ToString());
             if (currentState != GameState.GameOver)
             {
-                Invoke(nameof(StartRound), 2f);
+                Invoke(nameof(StartRound), startGameDelay);
             }
         }
 

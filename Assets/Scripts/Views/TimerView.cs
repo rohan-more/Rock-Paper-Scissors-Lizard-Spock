@@ -14,10 +14,11 @@ namespace RPSLS.UI
         [SerializeField] private Image radialFillImage;
         [SerializeField] private TMP_Text timerText;
         private float currentTime;
-        public GameController gameController;
+        [SerializeField] private GameController gameController;
 
         private void OnEnable()
         {
+            totalTime = gameController.ruleSet.Timer;
             currentTime = totalTime;
             radialFillImage.fillAmount = 1;
             timerText.text = string.Format(Constants.DECIMAL_ONE, currentTime);
