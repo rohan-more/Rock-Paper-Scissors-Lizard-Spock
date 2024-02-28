@@ -8,9 +8,13 @@ using Unity.VisualScripting;
 
 namespace RPSLS.Controllers
 {
+    public enum WinState
+    {
+        PlayerWon, ComputerWon, Draw
+    }
     public class RulesManager : IComparer<Core.ElementType>
     {
-
+        private WinState currentState;
         public RulesManager() { }
 
         private static readonly List<Rule> RuleSet = new List<Rule>
@@ -29,6 +33,8 @@ namespace RPSLS.Controllers
             new (Core.ElementType.Scissors,  Core.ElementType.Lizard)
          };
 
+        public WinState CurrentState { get => currentState; set => currentState = value; }
+
         public ElementType GetRandomElement()
         {
             float randomNumber = UnityEngine.Random.Range(1, 6);
@@ -37,43 +43,43 @@ namespace RPSLS.Controllers
 
         public string GetMatchResult(ElementType player, ElementType opponent)
         {
-            Debug.Log("Player is: " + player + " Opponent is " + opponent);
             int result = Compare(player, opponent);
 
             switch (result)
             {
                 case 0:
+                    CurrentState = WinState.PlayerWon;
                     ScoreController.IncreaseScore();
-                    return "Player Won!";
+                    return Constants.PLAYER_WON;
                 case 1:
-                    ScoreController.ResetScore();
+                    CurrentState = WinState.ComputerWon;
                     Events.EndGame?.Invoke();
-                    return "Computer Won!";
+                    return Constants.COMPUTER_WON;
                 default:
-                    return "Match Draw!";
+                    CurrentState = WinState.Draw;
+                    return Constants.MATCH_DRAW;
             }
         }
 
         public string OnTimeOver()
         {
-            ScoreController.ResetScore();
             Events.EndGame?.Invoke();
-            return "Time Over!";
+            return Constants.TIME_OVER;
         }
 
 
         public int Compare(Core.ElementType x, Core.ElementType y)
         {
             Rule value = RuleSet.FirstOrDefault(i => i.Winner == x && i.Loser == y);
-            if(value == null)
+            if (value == null)
             {
                 value = RuleSet.FirstOrDefault(i => i.Winner == y && i.Loser == x);
             }
-            if(value == null)
+            if (value == null)
             {
                 return 2;
             }
-            if(x == value.Winner)
+            if (x == value.Winner)
             {
                 return 0;
             }

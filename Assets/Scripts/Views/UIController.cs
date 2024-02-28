@@ -12,6 +12,7 @@ namespace RPSLS.UI
         [SerializeField] private TMP_Text computerChoiceText;
         [SerializeField] private TMP_Text resultText;
         [SerializeField] private TMP_Text scoreText;
+        [SerializeField] private TMP_Text highScoreText;
         public TMP_Text gameStateText;
         [SerializeField] private Button startGameBtn;
         [SerializeField] private Button backBtn;
@@ -19,20 +20,36 @@ namespace RPSLS.UI
         [SerializeField] private GameObject startPanel;
         [SerializeField] private GameObject gamePanel;
 
+        private void Start()
+        {
+            UpdateHighScoreText(SaveDataManager.GetKey(Constants.HIGH_SCORE_KEY).ToString());
+            
+        }
+
         private void OnEnable()
         {
             startGameBtn.onClick.AddListener(OnPlayClicked);
             backBtn.onClick.AddListener(OnBackClicked);
-            Events.EndGame += OnBackClicked;
+            Events.EndGame += EndGame;
         }
 
         private void OnDisable()
         {
             startGameBtn.onClick.RemoveListener(OnPlayClicked);
             backBtn.onClick.RemoveListener(OnBackClicked);
-            Events.EndGame -= OnBackClicked;
+            Events.EndGame -= EndGame;
         }
 
+        private void EndGame()
+        {
+            StartCoroutine(AddDelay(5f));
+        }
+
+        private IEnumerator AddDelay(float secs)
+        {
+            yield return new WaitForSeconds(secs);
+            OnBackClicked();
+        }
 
 
         private void OnPlayClicked()
@@ -51,7 +68,7 @@ namespace RPSLS.UI
         {
             if (scoreText != null)
             {
-                scoreText.text = "Score: " + ScoreController.PlayerScore.ToString();
+                scoreText.text = Constants.SCORE + ScoreController.PlayerScore.ToString();
             }
         }
 
@@ -60,6 +77,14 @@ namespace RPSLS.UI
             if (computerChoiceText != null)
             {
                 computerChoiceText.text = value;
+            }
+        }
+
+        public void UpdateHighScoreText(string value)
+        {
+            if (highScoreText != null)
+            {
+                highScoreText.text = Constants.HIGH_SCORE + value;
             }
         }
 

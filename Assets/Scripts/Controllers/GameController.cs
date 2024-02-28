@@ -1,13 +1,13 @@
 using RPSLS.Core;
 using RPSLS.UI;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 
 namespace RPSLS.Controllers
 {
-    public enum GameState { StartRound, WaitForPlayerInput, CalculateComputerChoice, DeclareResults, TimeOver, RoundOver }
+    public enum GameState { StartRound, WaitForPlayerInput, 
+        CalculateComputerChoice, DeclareResults, TimeOver, RoundOver, GameOver }
 
     public class GameController : MonoBehaviour
     {
@@ -49,11 +49,13 @@ namespace RPSLS.Controllers
            StartCoroutine(AddDelay(2f));
         }
 
-        public IEnumerator AddDelay(float seconds)
+        public IEnumerator AddDelay(float seconds) // I usually used Cysharp.Unitask for such delays but for some reason it isnt importing correctly in my project
         {
             yield return new WaitForSeconds(seconds);
             currentState = GameState.StartRound;
         }
+
+
         private void SetSelectedElement(ElementType element)
         {
             playerChoice = element;
@@ -66,6 +68,7 @@ namespace RPSLS.Controllers
             playerChoice = ElementType.Rock; 
             computerChoice = ElementType.Rock;
             uiController.UpdateComputerChoiceText(string.Empty);
+            uiController.UpdateHighScoreText(ScoreController.HighScore.ToString());
             uiController.ToggleResultsTextVisibility(false);
             currentState = GameState.CalculateComputerChoice;
         } 
@@ -73,11 +76,23 @@ namespace RPSLS.Controllers
         private void DeclareResults()
         {
             string result = rulesManager.GetMatchResult(playerChoice, computerChoice);
-            currentState = GameState.RoundOver;
+
+            if(rulesManager.CurrentState == WinState.ComputerWon)
+            {
+                currentState = GameState.GameOver;
+            }
+            else
+            {
+                currentState = GameState.RoundOver;
+            }
             uiController.UpdateResultsText(result);
             uiController.ToggleResultsTextVisibility(true);
             uiController.UpdateScoreText();
-            Invoke(nameof(StartRound), 2f);
+            uiController.UpdateHighScoreText(SaveDataManager.GetKey(Constants.HIGH_SCORE_KEY).ToString());
+            if (currentState != GameState.GameOver)
+            {
+                Invoke(nameof(StartRound), 2f);
+            }
         }
 
         private void TimeOver()
@@ -90,7 +105,6 @@ namespace RPSLS.Controllers
 
         void Update()
         {
-            //uiController.gameStateText.text = currentState.ToString();
             Debug.Log(currentState.ToString());
             switch (currentState)
             {
