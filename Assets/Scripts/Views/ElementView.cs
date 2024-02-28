@@ -3,22 +3,26 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class ElementView : MonoBehaviour
+namespace RPSLS.UI
 {
-    [SerializeField] private Button elementButton;
-    public RPSLS.Core.ElementType elementType;
-    private void OnEnable()
+    public class ElementView : MonoBehaviour
     {
-        elementButton.onClick.AddListener(HandleBtnClick);
-    }
+        [SerializeField] private Button elementButton;
+        public RPSLS.Core.ElementType elementType;
+        private void OnEnable()
+        {
+            elementButton.onClick.AddListener(HandleBtnClick);
+        }
 
-    private void OnDisable()
-    {
-        elementButton.onClick.RemoveListener(HandleBtnClick);
-    }
+        private void OnDisable()
+        {
+            elementButton.onClick.RemoveListener(HandleBtnClick);
+        }
 
-    private void HandleBtnClick()
-    {
-        Events.SelectedElement?.Invoke(elementType);
+        private void HandleBtnClick()
+        {
+            Events.SelectedElement?.Invoke(elementType);
+        }
     }
 }
+

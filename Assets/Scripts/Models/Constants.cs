@@ -6,6 +6,7 @@ namespace RPSLS.Core
     public static class Constants
     {
         public const string HIGH_SCORE_KEY = "HighScore";
+        public const string WIN_REACTION_TIME = "WinReactionTime";
         public const string PLAYER_WON = "Player Won!";
         public const string COMPUTER_WON = "Computer Won!";
         public const string MATCH_DRAW = "Match Draw!";

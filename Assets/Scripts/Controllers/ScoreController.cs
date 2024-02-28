@@ -1,6 +1,9 @@
 
 namespace RPSLS.Core
 {
+    /// <summary>
+    /// Controls the scoring system for the game 
+    /// </summary>
     public static class ScoreController
     {
         private static int playerScore = 0;

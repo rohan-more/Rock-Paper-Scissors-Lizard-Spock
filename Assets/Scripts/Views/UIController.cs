@@ -75,6 +75,7 @@ namespace RPSLS.UI
         {
             startPanel.SetActive(true);
             gamePanel.SetActive(false);
+            Events.OnBack?.Invoke();
         }
 
         public void UpdateScoreText()

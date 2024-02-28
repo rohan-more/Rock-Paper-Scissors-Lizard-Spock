@@ -12,6 +12,9 @@ namespace RPSLS.Controllers
     {
         PlayerWon, ComputerWon, Draw
     }
+    /// <summary>
+    /// Controls and handles the rules and its comparison
+    /// </summary>
     public class RulesManager : IComparer<Core.ElementType>
     {
         private WinState currentState;

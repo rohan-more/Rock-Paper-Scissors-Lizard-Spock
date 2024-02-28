@@ -9,6 +9,7 @@ namespace RPSLS.Core
         public static Action<ElementType> SelectedElement;
         public static Action StartGame;
         public static Action EndGame;
+        public static Action OnBack;
     }
 }
 

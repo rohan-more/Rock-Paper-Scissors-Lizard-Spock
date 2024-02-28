@@ -35,7 +35,7 @@ namespace RPSLS.Controllers
             Events.SelectedElement += SetSelectedElement;
             Events.StartGame += StartGame;
             Events.EndGame += EndGame;
-    
+            Events.OnBack += OnBack;
         }
 
         private void OnDisable()
@@ -43,11 +43,16 @@ namespace RPSLS.Controllers
             Events.SelectedElement -= SetSelectedElement;
             Events.StartGame -= StartGame;
             Events.EndGame -= EndGame;
+            Events.OnBack -= OnBack;
         }
 
         private void EndGame()
         {
             currentState = GameState.RoundOver;
+        }
+        private void OnBack()
+        {
+            currentState = GameState.GameOver;
         }
 
         private void StartGame()
